@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
  *
  * complete the endless on scroll
  * TODO wrap the adapter around the footer adapter
- *
+ *TODO Ineed to change everything
   *
    *
    *
