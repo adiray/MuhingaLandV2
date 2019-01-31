@@ -31,19 +31,19 @@ public class LandResponse  extends AbstractItem<LandResponse, LandResponse.LandV
     private String description;
     @SerializedName("img_2")
     @Expose
-    private Object img2;
+    private String img2;
     @SerializedName("img_3")
     @Expose
-    private Object img3;
+    private String img3;
     @SerializedName("img_4")
     @Expose
-    private Object img4;
+    private String img4;
     @SerializedName("size")
     @Expose
     private String size;
     @SerializedName("img_5")
     @Expose
-    private Object img5;
+    private String img5;
     @SerializedName("ownerId")
     @Expose
     private Object ownerId;
@@ -95,7 +95,7 @@ public class LandResponse  extends AbstractItem<LandResponse, LandResponse.LandV
      * @param img3
      * @param img4
      */
-    public LandResponse(Object owner, String title, Object sKU, Integer created, String description, Object img2, Object img3, Object img4, String size, Object img5, Object ownerId, String objectId, String location, String price, Integer updated, String mianImageReference, String _class) {
+    public LandResponse(Object owner, String title, Object sKU, Integer created, String description, String img2, String img3, String img4, String size, String img5, Object ownerId, String objectId, String location, String price, Integer updated, String mianImageReference, String _class) {
         super();
         this.owner = owner;
         this.title = title;
@@ -156,27 +156,27 @@ public class LandResponse  extends AbstractItem<LandResponse, LandResponse.LandV
         this.description = description;
     }
 
-    public Object getImg2() {
+    public String getImg2() {
         return img2;
     }
 
-    public void setImg2(Object img2) {
+    public void setImg2(String img2) {
         this.img2 = img2;
     }
 
-    public Object getImg3() {
+    public String getImg3() {
         return img3;
     }
 
-    public void setImg3(Object img3) {
+    public void setImg3(String img3) {
         this.img3 = img3;
     }
 
-    public Object getImg4() {
+    public String getImg4() {
         return img4;
     }
 
-    public void setImg4(Object img4) {
+    public void setImg4(String img4) {
         this.img4 = img4;
     }
 
@@ -188,11 +188,11 @@ public class LandResponse  extends AbstractItem<LandResponse, LandResponse.LandV
         this.size = size;
     }
 
-    public Object getImg5() {
+    public String getImg5() {
         return img5;
     }
 
-    public void setImg5(Object img5) {
+    public void setImg5(String img5) {
         this.img5 = img5;
     }
 
@@ -271,7 +271,7 @@ public class LandResponse  extends AbstractItem<LandResponse, LandResponse.LandV
 
     @Override
     public int getType() {
-        return R.id.land_main_image;
+        return R.id.land_main_image_switcher;
     }
 
     @Override
@@ -289,6 +289,7 @@ public class LandResponse  extends AbstractItem<LandResponse, LandResponse.LandV
         holder.title_vh.setText(getTitle());
         Glide.with(holder.itemView).load(mianImageReference).into(holder.land_main_image_vh);
 
+
     }
 
     protected static class LandViewHolder extends RecyclerView.ViewHolder {
@@ -305,7 +306,7 @@ public class LandResponse  extends AbstractItem<LandResponse, LandResponse.LandV
             location_vh = itemView.findViewById(R.id.land_location);
             price_vh = itemView.findViewById(R.id.land_price);
             size_vh = itemView.findViewById(R.id.land_size);
-            land_main_image_vh = itemView.findViewById(R.id.land_main_image);
+            land_main_image_vh = itemView.findViewById(R.id.land_main_image_switcher);
 
         }
     }

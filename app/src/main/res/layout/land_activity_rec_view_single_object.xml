@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/land_main_image"
+            android:id="@+id/land_main_image_switcher"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerCrop"
@@ -43,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/land_main_image" />
+            app:layout_constraintTop_toBottomOf="@+id/land_main_image_switcher" />
 
 
         <TextView

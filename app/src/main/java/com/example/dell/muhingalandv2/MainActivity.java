@@ -1,6 +1,6 @@
 package com.example.dell.muhingalandv2;
 
-import android.os.Handler;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,11 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FooterAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter_extensions.items.ProgressItem;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> queryStringsHolder = new ArrayList<>();
     ArrayList<String> locationOptions = new ArrayList<String>();
     String queryString = null;
+    public static final String EXTRA_ARRAY = "com.example.muhinga.landItemImageReferences";
+
     StringBuilder mb = new StringBuilder();
 
     //declare the view objects
@@ -119,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
 
 
-
                 //a statement to check if the user is refreshing items that have been filtered or just refreshing all items unfiltered
                 if (filteredState) {
                     refreshFilteredLand();
@@ -158,6 +160,33 @@ public class MainActivity extends AppCompatActivity {
                 requestFilteredHouses();
                 filteredState = true;
 
+            }
+        });
+
+
+        //add an onClick on the fast adapter
+        landFastAdapter.withSelectable(true);
+        landFastAdapter.withOnClickListener(new FastAdapter.OnClickListener<LandResponse>() {
+            @Override
+            public boolean onClick(View v, IAdapter<LandResponse> adapter, LandResponse item, int position) {
+
+                // Handle click here
+
+                Intent intent = new Intent(MainActivity.this, LandDetailsView.class);
+                ArrayList<Object> landItemImageReferences = new ArrayList<>();
+
+                //add the image references to the image reference array
+                landItemImageReferences.add(item.getMianImageReference());
+                landItemImageReferences.add(item.getImg2());
+                landItemImageReferences.add(item.getImg3());
+                landItemImageReferences.add(item.getImg4());
+                landItemImageReferences.add(item.getImg5());
+
+                intent.putExtra(EXTRA_ARRAY, landItemImageReferences);
+                startActivity(intent);
+
+
+                return true;
             }
         });
 
@@ -471,43 +500,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-/*************************************************************************************************************************************************/
+    /*************************************************************************************************************************************************/
 
 
+    void loadMoreFilteredLand() {
+
+        filteredInfiniteLoading = true;
+        onFilteredRefreshing = false;
+        filteredTableOffset = filteredLandResponseArray.size();
+        filteredTableOffsetString = filteredTableOffset.toString();
+        landUserFilterMap.put("offset", filteredTableOffsetString);
+        requestFilteredHouses();
+
+    }
 
 
-void loadMoreFilteredLand() {
-
-    filteredInfiniteLoading = true;
-    onFilteredRefreshing = false;
-    filteredTableOffset = filteredLandResponseArray.size();
-    filteredTableOffsetString = filteredTableOffset.toString();
-    landUserFilterMap.put("offset", filteredTableOffsetString);
-    requestFilteredHouses();
-
-}
+    /*************************************************************************************************************************************************/
 
 
-/*************************************************************************************************************************************************/
+    void refreshFilteredLand() {
 
 
+        filteredTableOffset = 0;
+        filteredTableOffsetString = filteredTableOffset.toString();
+        landUserFilterMap.put("offset", filteredTableOffsetString);  //update the value of the offset in the request url
+        onFilteredRefreshing = true;
+        filteredInfiniteLoading = false;
+        requestFilteredHouses();
+
+        //stop the refreshing animation
+        landSwipeRefresh.setRefreshing(false);
+
+    }
 
 
+    /*************************************************************************************************************************************************/
 
-void refreshFilteredLand() {
-
-
-    filteredTableOffset = 0;
-    filteredTableOffsetString = filteredTableOffset.toString();
-    landUserFilterMap.put("offset", filteredTableOffsetString);  //update the value of the offset in the request url
-    onFilteredRefreshing = true;
-    filteredInfiniteLoading = false;
-    requestFilteredHouses();
-
-    //stop the refreshing animation
-    landSwipeRefresh.setRefreshing(false);
-
-}
 
 }
 

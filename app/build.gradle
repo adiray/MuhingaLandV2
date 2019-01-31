@@ -9,6 +9,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        defaultConfig{
+            vectorDrawables.useSupportLibrary = true
+        }
     }
     buildTypes {
         release {
@@ -17,6 +21,8 @@ android {
         }
     }
 }
+
+
 
 dependencies {
     implementation('com.mikepenz:fastadapter:2.6.3@aar') {
