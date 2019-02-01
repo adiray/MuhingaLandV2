@@ -43,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> locationOptions = new ArrayList<String>();
     String queryString = null;
     public static final String EXTRA_ARRAY = "com.example.muhinga.landItemImageReferences";
+    public static final String EXTRA_DESCRIPTION = "com.example.muhinga.landItemDescription";
+    public static final String EXTRA_TITLE = "com.example.muhinga.landItemTitle";
+    public static final String EXTRA_PRICE = "com.example.muhinga.landItemPrice";
+    public static final String EXTRA_LOCATION = "com.example.muhinga.landItemLocation";
+    public static final String EXTRA_SIZE = "com.example.muhinga.landItemSize";
 
     StringBuilder mb = new StringBuilder();
 
@@ -174,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(MainActivity.this, LandDetailsView.class);
                 ArrayList<Object> landItemImageReferences = new ArrayList<>();
+                String location, title, price, size, description;
 
                 //add the image references to the image reference array
                 landItemImageReferences.add(item.getMianImageReference());
@@ -182,7 +188,19 @@ public class MainActivity extends AppCompatActivity {
                 landItemImageReferences.add(item.getImg4());
                 landItemImageReferences.add(item.getImg5());
 
+                //add the other details to the respective variables
+                location = item.getLocation();
+                title = item.getTitle();
+                price = item.getPrice();
+                size = item.getSize();
+                description = item.getDescription();
+
                 intent.putExtra(EXTRA_ARRAY, landItemImageReferences);
+                intent.putExtra(EXTRA_LOCATION, location);
+                intent.putExtra(EXTRA_TITLE, title);
+                intent.putExtra(EXTRA_PRICE, price);
+                intent.putExtra(EXTRA_SIZE, size);
+                intent.putExtra(EXTRA_DESCRIPTION, description);
                 startActivity(intent);
 
 

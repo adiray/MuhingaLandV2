@@ -33,7 +33,6 @@ dependencies {
     implementation 'com.mikepenz:fastadapter-extensions:2.6.3@aar'
 //The tiny Materialize library used for its useful helper classes
     implementation 'com.mikepenz:materialize:1.0.3@aar'
-
     implementation 'com.github.Guilherme-HRamos:Easy-Save:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
