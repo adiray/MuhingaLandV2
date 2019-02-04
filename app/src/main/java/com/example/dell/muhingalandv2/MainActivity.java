@@ -6,7 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -48,14 +52,15 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_PRICE = "com.example.muhinga.landItemPrice";
     public static final String EXTRA_LOCATION = "com.example.muhinga.landItemLocation";
     public static final String EXTRA_SIZE = "com.example.muhinga.landItemSize";
-
     StringBuilder mb = new StringBuilder();
+
 
     //declare the view objects
     SwipeRefreshLayout landSwipeRefresh; //swipe to refresh view for the land recycler view
     EditText landPriceEditText, landSizeEditText;
     Button filterLandButton;
     Spinner landLocationSpinner;
+    Toolbar mainToolbar;
 
 
     //declare the recycler view objects
@@ -89,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         filterLandButton = findViewById(R.id.submit_land_filter_button);
         landLocationSpinner = findViewById(R.id.location_spinner);
         landSwipeRefresh = findViewById(R.id.land_swipe_refresh);
+        mainToolbar = findViewById(R.id.mytb);
+        setSupportActionBar(mainToolbar);
 
         //build out the main recycler view
         landMainRecView = findViewById(R.id.land_activity_rec_view);
@@ -208,6 +215,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+
+    /*************************************************************************************************************************************************/
+    //APP BAR CODE STARTS HERE
+
+
+    //inflate the menu layout file for the toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.app_bar_menu, menu);
+        return true;
+    }
+
+
+    //specify the actions that happen when each menu item is clicked
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case (R.id.refresh):
+
+                Intent intent = new Intent(MainActivity.this, MusicHome.class);
+                startActivity(intent);
+
+
+                break;
+
+            case (R.id.profile):
+                Toast.makeText(this, "Profile selected", Toast.LENGTH_SHORT).show();
+                break;
+
+
+            case (R.id.account):
+                Toast.makeText(this, "Account selected", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
 

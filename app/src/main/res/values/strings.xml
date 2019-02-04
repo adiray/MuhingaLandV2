@@ -27,5 +27,10 @@
     <string name="go">Go</string>
     <string name="add_filters">Add Filters</string>
     <string name="title">Title</string>
+    <string name="browse_artists">browse artists</string>
+    <string name="artists_image">Artists\' image</string>
+    <string name="artists_cover_image">Artists\' cover image</string>
+    <string name="refresh">refresh</string>
+    <string name="account">account</string>
 
 </resources>
