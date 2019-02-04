@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*************************************************************************************************************************************************/
     //APP BAR CODE STARTS HERE
+    /*************************************************************************************************************************************************/
 
 
     //inflate the menu layout file for the toolbar
@@ -259,7 +260,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     /*************************************************************************************************************************************************/
+    //APP BAR CODE ENDS HERE
+    /*************************************************************************************************************************************************/
+
+
+
+
+
+
+
 
 
     void buildRetrofitClient() {
@@ -478,7 +489,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ArrayList<LandResponse>> call, Response<ArrayList<LandResponse>> response) {
 
                 String stringHolder;
-                int rSize = response.body().size();
+                int rSize = 0;
+                if (response.body() != null) {
+                    rSize = response.body().size();
+                }
 
                 //a for statement to cycle through the response and add every unique location to the locationOptions array
                 for (int counter = 0; counter < rSize; counter++) {

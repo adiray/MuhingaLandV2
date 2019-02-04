@@ -5,8 +5,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.annotations.SerializedName;
 import com.mikepenz.fastadapter.items.AbstractItem;
+
+import java.util.List;
 
 public class ArtistViewAlbumResponse extends AbstractItem<ArtistViewAlbumResponse, ArtistViewAlbumResponse.AlbumResponseViewHolder> {
 
@@ -125,21 +128,6 @@ public class ArtistViewAlbumResponse extends AbstractItem<ArtistViewAlbumRespons
                         "}";
     }
 
-    @Override
-    public AlbumResponseViewHolder getViewHolder(View v) {
-        return null;
-    }
-
-    @Override
-    public int getType() {
-        return 0;
-    }
-
-    @Override
-    public int getLayoutRes() {
-        return 0;
-    }
-
 
     /*******************************************************************************************************************************************************
      * FAST ADAPTER CODE STARTS HERE
@@ -147,22 +135,45 @@ public class ArtistViewAlbumResponse extends AbstractItem<ArtistViewAlbumRespons
      */
 
 
+    @Override
+    public AlbumResponseViewHolder getViewHolder(View v) {
+        return new AlbumResponseViewHolder(v);
+    }
+
+    @Override
+    public int getType() {
+        return R.id.artist_view_album_image;
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.artist_view_single_album_view;
+    }
+
+
+    @Override
+    public void bindView(AlbumResponseViewHolder holder, List<Object> payloads) {
+        super.bindView(holder, payloads);
+
+        holder.album_name_vh.setText(getAlbum().getName());
+        Glide.with(holder.itemView).load(getAlbum().getCoverImage()).into(holder.album_image_vh);
+
+    }
 
     protected static class AlbumResponseViewHolder extends RecyclerView.ViewHolder {
 
         //declaring the views
-        ImageView artist_image_vh;
-        TextView artist_name_vh;
+        ImageView album_image_vh;
+        TextView album_name_vh;
 
         public AlbumResponseViewHolder(View itemView) {
             super(itemView);
 
             //assigning the previously declared views
-            artist_image_vh = itemView.findViewById(R.id.musichome_single_artist_image);
-            artist_name_vh = itemView.findViewById(R.id.activty_home_single_artist_name);
+            album_image_vh = itemView.findViewById(R.id.artist_view_album_image);
+            album_name_vh = itemView.findViewById(R.id.artist_view_album_name);
         }
     }
-
 
 
 }

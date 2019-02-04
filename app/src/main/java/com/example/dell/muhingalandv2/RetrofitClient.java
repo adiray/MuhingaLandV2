@@ -17,6 +17,11 @@ public interface RetrofitClient {
     Call<ArrayList<ArtistResponse>> getFilteredArtist(@QueryMap(encoded = true) Map<String, String> userFilters_Artist);
 
 
+    @GET("artist")
+    Call<ArrayList<ArtistViewAlbumResponse>> getFilteredArtistWithAlbum(@QueryMap(encoded = true) Map<String, String> userFilters_Artist_withAlbum);
+
+
+
 
 }
 

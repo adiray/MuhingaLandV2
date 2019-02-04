@@ -1,13 +1,17 @@
 package com.example.dell.muhingalandv2;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FooterAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter_extensions.items.ProgressItem;
@@ -51,6 +55,11 @@ public class MusicHome extends AppCompatActivity {
     FooterAdapter<ProgressItem> footerAdapter = new FooterAdapter<>();
     EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
+    //Intent objects
+    public static final String EXTRA_ARTIST_NAME = "com.example.muhinga.artistName";
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +67,7 @@ public class MusicHome extends AppCompatActivity {
         setContentView(R.layout.activity_musichome);
 
         //initialize the views
-        artistSwipeRefresh= findViewById(R.id.activity_music_home_artist_swipe_refresh);
+        artistSwipeRefresh = findViewById(R.id.activity_music_home_artist_swipe_refresh);
 
 
         //Build out the recycler view
@@ -120,6 +129,24 @@ public class MusicHome extends AppCompatActivity {
         buildRetrofitClient();  //build the retrofit client
 
         requestArtists(); //make the initial / first  artist request
+
+
+        artistFastAdapter.withSelectable(true);
+        artistFastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ArtistResponse>() {
+            @Override
+            public boolean onClick(View v, IAdapter<ArtistResponse> adapter, ArtistResponse item, int position) {
+
+                Intent intent = new Intent(MusicHome.this, ArtistView.class);
+
+                //Todo this is where you stopped. add the extras for the intents
+                intent.putExtra(EXTRA_ARTIST_NAME,item.getName());
+
+
+
+                return true;
+            }
+        });
+
 
     }
 
@@ -248,9 +275,6 @@ public class MusicHome extends AppCompatActivity {
 
 
     /*************************************************************************************************************************************************/
-
-
-
 
 
 }
