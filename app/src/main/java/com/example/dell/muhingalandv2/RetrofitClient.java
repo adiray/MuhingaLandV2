@@ -13,17 +13,4 @@ public interface RetrofitClient {
     Call<ArrayList<LandResponse>> getFilteredLand(@QueryMap(encoded = true) Map<String, String> userFilters_Land);
 
 
-    @GET("artist")
-    Call<ArrayList<ArtistResponse>> getFilteredArtist(@QueryMap(encoded = true) Map<String, String> userFilters_Artist);
-
-
-    @GET("artist")
-    Call<ArrayList<ArtistViewAlbumResponse>> getFilteredArtistWithAlbum(@QueryMap(encoded = true) Map<String, String> userFilters_Artist_withAlbum);
-
-
-
-
 }
-
-
-//https://api.backendless.com/125AF8BD-1879-764A-FF22-13FB1C162400/6F40C4D4-6CFB-E66A-FFC7-D71E4A8BF100/data/artist?where=name%3D%20'Kygo'&loadRelations=album

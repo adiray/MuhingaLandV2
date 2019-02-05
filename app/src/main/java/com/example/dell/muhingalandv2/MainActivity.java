@@ -6,11 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,20 +48,19 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_PRICE = "com.example.muhinga.landItemPrice";
     public static final String EXTRA_LOCATION = "com.example.muhinga.landItemLocation";
     public static final String EXTRA_SIZE = "com.example.muhinga.landItemSize";
-    StringBuilder mb = new StringBuilder();
 
+    StringBuilder mb = new StringBuilder();
 
     //declare the view objects
     SwipeRefreshLayout landSwipeRefresh; //swipe to refresh view for the land recycler view
     EditText landPriceEditText, landSizeEditText;
     Button filterLandButton;
     Spinner landLocationSpinner;
-    Toolbar mainToolbar;
 
 
     //declare the recycler view objects
     RecyclerView landMainRecView;
-    ArrayList<LandResponse> allLandResponseArray, filteredLandResponseArray;
+    ArrayList<LandResponse> allLandResponseArray=new ArrayList<>(), filteredLandResponseArray = new ArrayList<>();
 
 
     //declare the retrofit objects. All these are used with retrofit
@@ -94,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
         filterLandButton = findViewById(R.id.submit_land_filter_button);
         landLocationSpinner = findViewById(R.id.location_spinner);
         landSwipeRefresh = findViewById(R.id.land_swipe_refresh);
-        mainToolbar = findViewById(R.id.mytb);
-        setSupportActionBar(mainToolbar);
 
         //build out the main recycler view
         landMainRecView = findViewById(R.id.land_activity_rec_view);
@@ -215,62 +208,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
     /*************************************************************************************************************************************************/
-    //APP BAR CODE STARTS HERE
-    /*************************************************************************************************************************************************/
-
-
-    //inflate the menu layout file for the toolbar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.app_bar_menu, menu);
-        return true;
-    }
-
-
-    //specify the actions that happen when each menu item is clicked
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case (R.id.refresh):
-
-                Intent intent = new Intent(MainActivity.this, MusicHome.class);
-                startActivity(intent);
-
-
-                break;
-
-            case (R.id.profile):
-                Toast.makeText(this, "Profile selected", Toast.LENGTH_SHORT).show();
-                break;
-
-
-            case (R.id.account):
-                Toast.makeText(this, "Account selected", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
-
-
-    /*************************************************************************************************************************************************/
-    //APP BAR CODE ENDS HERE
-    /*************************************************************************************************************************************************/
-
-
-
-
-
-
-
 
 
     void buildRetrofitClient() {
@@ -303,47 +244,50 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArrayList<LandResponse>> call, Response<ArrayList<LandResponse>> response) {
 
-                if (!onRefreshing && !infiniteLoading) {
+                if (response.body() != null) {
+                    if (!onRefreshing && !infiniteLoading) {
 
-                    //perform the normal sequence of actions for a first time load
-                    allLandResponseArray = response.body();
-                    landFastAdapter.add(allLandResponseArray);
-                    landMainRecView.setAdapter(footerAdapter.wrap(landFastAdapter));
-
-
-                    Log.d("myLogsRequestUrl", response.raw().request().url().toString());
-
-                } else if (onRefreshing && !infiniteLoading) {
-
-                    //perform the sequence of actions for a refreshed load
-                    allLandResponseArray.clear();
-                    allLandResponseArray = response.body();
-                    landFastAdapter.clear();
-                    landMainRecView.clearOnScrollListeners();
-                    landMainRecView.addOnScrollListener(endlessRecyclerOnScrollListener);
-                    landFastAdapter.add(response.body());
-                    endlessRecyclerOnScrollListener.resetPageCount();
+                        //perform the normal sequence of actions for a first time load
+                        allLandResponseArray = response.body();
+                        landFastAdapter.add(allLandResponseArray);
+                        landMainRecView.setAdapter(footerAdapter.wrap(landFastAdapter));
 
 
-                    Log.d("myLogsRequestUrlOR", response.raw().request().url().toString());
+                        Log.d("myLogsRequestUrl", response.raw().request().url().toString());
 
+                    } else if (onRefreshing && !infiniteLoading) {
 
-                } else if (infiniteLoading && !onRefreshing) {
-
-                    allLandResponseArray.addAll(response.body());
-                    footerAdapter.clear();
-                    if (response.body().size() > 0) {
+                        //perform the sequence of actions for a refreshed load
+                        allLandResponseArray.clear();
+                        allLandResponseArray = response.body();
+                        landFastAdapter.clear();
+                        landMainRecView.clearOnScrollListeners();
+                        landMainRecView.addOnScrollListener(endlessRecyclerOnScrollListener);
                         landFastAdapter.add(response.body());
-                    } else {
-                        Toast.makeText(MainActivity.this, "No more items", Toast.LENGTH_LONG).show();
+                        endlessRecyclerOnScrollListener.resetPageCount();
+
+
+                        Log.d("myLogsRequestUrlOR", response.raw().request().url().toString());
+
+
+                    } else if (infiniteLoading && !onRefreshing) {
+
+                        allLandResponseArray.addAll(response.body());
+                        footerAdapter.clear();
+                        if (response.body().size() > 0) {
+                            landFastAdapter.add(response.body());
+                        } else {
+                            Toast.makeText(MainActivity.this, "No more items", Toast.LENGTH_LONG).show();
+                        }
+
+
+                        Log.d("myLogsRequestUrlIL", response.raw().request().url().toString() + " table offset = " + tableOffset);
+                        infiniteLoading = false;
+
+
                     }
-
-
-                    Log.d("myLogsRequestUrlIL", response.raw().request().url().toString() + " table offset = " + tableOffset);
-                    infiniteLoading = false;
-
-
                 }
+
 
                 Log.d("myLogsOnSuccess", "onResponse: response successful");
 
@@ -496,13 +440,15 @@ public class MainActivity extends AppCompatActivity {
 
                 //a for statement to cycle through the response and add every unique location to the locationOptions array
                 for (int counter = 0; counter < rSize; counter++) {
-                    stringHolder = response.body().get(counter).getLocation();
-                    if (!locationOptions.contains(stringHolder)) {
-                        locationOptions.add(stringHolder);
+                    if (response.body() != null) {
+                        stringHolder = response.body().get(counter).getLocation();
+
+                        if (!locationOptions.contains(stringHolder)) {
+                            locationOptions.add(stringHolder);
+                        }
                     }
+
                 }
-
-
             }
 
             @Override
