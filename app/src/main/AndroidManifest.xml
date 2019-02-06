@@ -24,7 +24,8 @@
             android:name=".LandDetailsView"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".MusicHome" />
-        <activity android:name=".ArtistView"></activity>
+        <activity android:name=".ArtistView" />
+        <activity android:name=".SongsView"></activity>
     </application>
 
 </manifest>

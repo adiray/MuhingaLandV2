@@ -57,6 +57,11 @@ public class MusicHome extends AppCompatActivity {
 
     //Intent objects
     public static final String EXTRA_ARTIST_NAME = "com.example.muhinga.artistName";
+    public static final String EXTRA_ARTIST_PROFILE_IMAGE_REFERENCE = "com.example.muhinga.artistProfileImageReference";
+    public static final String EXTRA_ARTIST_COVER_IMAGE_REFERENCE = "com.example.muhinga.artistCoverImageReference";
+
+
+
 
 
 
@@ -140,6 +145,10 @@ public class MusicHome extends AppCompatActivity {
 
                 //Todo this is where you stopped. add the extras for the intents
                 intent.putExtra(EXTRA_ARTIST_NAME,item.getName());
+                intent.putExtra(EXTRA_ARTIST_COVER_IMAGE_REFERENCE,item.getCoverImage());
+                intent.putExtra(EXTRA_ARTIST_PROFILE_IMAGE_REFERENCE,item.getProfilePicture());
+                startActivity(intent);
+
 
 
 

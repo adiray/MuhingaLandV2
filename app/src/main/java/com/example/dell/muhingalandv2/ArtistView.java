@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.mikepenz.fastadapter.adapters.FooterAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter_extensions.items.ProgressItem;
@@ -29,11 +32,13 @@ public class ArtistView extends AppCompatActivity {
 
     //miscellaneous objects
     Boolean onRefreshing = false, infiniteLoading = false;
-    String selectedArtistName , selectedArtistNameQueryString;
+    String selectedArtistName , selectedArtistNameQueryString , selectedArtistCoverImageReference,selectedArtistProfileImageReference;
 
 
     //declare the view objects
     SwipeRefreshLayout artistViewAlbumRecViewSwipeRefresh;
+    ImageView artistProfileImage,artistCoverImage;
+    TextView selectedArtistNameTextView;
 
 
     //declare the recycler view objects
@@ -68,11 +73,22 @@ public class ArtistView extends AppCompatActivity {
         Intent intent = getIntent();
         selectedArtistName = intent.getStringExtra(MusicHome.EXTRA_ARTIST_NAME);
         selectedArtistNameQueryString = "name%3D%20"+"'"+selectedArtistName+"'";
+        selectedArtistCoverImageReference= intent.getStringExtra(MusicHome.EXTRA_ARTIST_COVER_IMAGE_REFERENCE);
+        selectedArtistProfileImageReference = intent.getStringExtra(MusicHome.EXTRA_ARTIST_PROFILE_IMAGE_REFERENCE);
                 //name%3D%20'Kygo'
 
 
         //Initialize the views
         artistViewAlbumRecViewSwipeRefresh = findViewById(R.id.artist_view_album_swipe_refresh);
+        artistCoverImage = findViewById(R.id.artist_view_artist_cover_image);
+        artistProfileImage = findViewById(R.id.artist_view_artist_profile_image);
+        selectedArtistNameTextView = findViewById(R.id.artist_view_name);
+
+
+        //load the profile and cover images into the respective views
+        Glide.with(this).load(selectedArtistCoverImageReference).into(artistCoverImage);
+        Glide.with(this).load(selectedArtistProfileImageReference).into(artistProfileImage);
+        selectedArtistNameTextView.setText(selectedArtistName);
 
 
         //build out the main recycler view
