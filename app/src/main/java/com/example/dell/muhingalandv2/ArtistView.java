@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FooterAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter_extensions.items.ProgressItem;
@@ -32,12 +35,14 @@ public class ArtistView extends AppCompatActivity {
 
     //miscellaneous objects
     Boolean onRefreshing = false, infiniteLoading = false;
-    String selectedArtistName , selectedArtistNameQueryString , selectedArtistCoverImageReference,selectedArtistProfileImageReference;
+    String selectedArtistName, selectedArtistNameQueryString, selectedArtistCoverImageReference, selectedArtistProfileImageReference;
+    public static final String EXTRA_SELECTED_ALBUM_NAME = "com.example.muhinga.selectedAlbumName";
+    public static final String EXTRA_SELECTED_ARTIST_NAME = "com.example.muhinga.selectedAlbumName";
 
 
     //declare the view objects
     SwipeRefreshLayout artistViewAlbumRecViewSwipeRefresh;
-    ImageView artistProfileImage,artistCoverImage;
+    ImageView artistProfileImage, artistCoverImage;
     TextView selectedArtistNameTextView;
 
 
@@ -72,10 +77,10 @@ public class ArtistView extends AppCompatActivity {
         //get the intent that started this activity
         Intent intent = getIntent();
         selectedArtistName = intent.getStringExtra(MusicHome.EXTRA_ARTIST_NAME);
-        selectedArtistNameQueryString = "name%3D%20"+"'"+selectedArtistName+"'";
-        selectedArtistCoverImageReference= intent.getStringExtra(MusicHome.EXTRA_ARTIST_COVER_IMAGE_REFERENCE);
+        selectedArtistNameQueryString = "name%3D%20" + "'" + selectedArtistName + "'";
+        selectedArtistCoverImageReference = intent.getStringExtra(MusicHome.EXTRA_ARTIST_COVER_IMAGE_REFERENCE);
         selectedArtistProfileImageReference = intent.getStringExtra(MusicHome.EXTRA_ARTIST_PROFILE_IMAGE_REFERENCE);
-                //name%3D%20'Kygo'
+        //name%3D%20'Kygo'
 
 
         //Initialize the views
@@ -139,7 +144,7 @@ public class ArtistView extends AppCompatActivity {
 
 
         //fill the query map object for the retrofit query
-        albumsFilterMap.put("where",selectedArtistNameQueryString);
+        albumsFilterMap.put("where", selectedArtistNameQueryString);
         albumsFilterMap.put("pageSize", "4");
         albumsFilterMap.put("offset", tableOffsetString);
         albumsFilterMap.put("sortBy", "created%20desc");
@@ -149,6 +154,26 @@ public class ArtistView extends AppCompatActivity {
         buildRetrofitClient();  //build the retrofit client
 
         requestAlbums(); //make the initial / first  houses request
+
+
+        //add an on click to the fast adapter
+        artistViewAlbumFastAdapter.withSelectable(true);
+        artistViewAlbumFastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ArtistViewAlbumResponse>() {
+            @Override
+            public boolean onClick(View v, IAdapter<ArtistViewAlbumResponse> adapter, ArtistViewAlbumResponse item, int position) {
+
+                //handle click here
+                String selectedAlbumName = item.getName();
+
+                Intent intent = new Intent(ArtistView.this, SongsView.class);
+                intent.putExtra(EXTRA_SELECTED_ALBUM_NAME,selectedAlbumName);
+                intent.putExtra(EXTRA_SELECTED_ARTIST_NAME,selectedArtistName);
+                startActivity(intent);
+
+
+                return true;
+            }
+        });
 
 
     }

@@ -6,4 +6,63 @@
     android:layout_height="match_parent"
     tools:context=".SongsView">
 
+
+    <include
+        android:id="@+id/mytb"
+        layout="@layout/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/songs_view_album_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:foregroundGravity="center_horizontal"
+        android:text="TextView"
+        android:textColor="@color/my_color_secondary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mytb" />
+
+    <TextView
+        android:id="@+id/songs_view_artist_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:foregroundGravity="center_horizontal"
+        android:text="TextView"
+        android:textColor="@color/my_color_secondary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/songs_view_album_name"
+        app:layout_constraintTop_toBottomOf="@+id/mytb" />
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/songs_view_songs_swipe_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mytb">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/songs_view_songs_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </android.support.constraint.ConstraintLayout>
