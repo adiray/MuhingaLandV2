@@ -47,6 +47,7 @@ public class SongsView extends AppCompatActivity {
     //Recycler View objects
     RecyclerView songsRecyclerView;
     ArrayList<SongResponse> songResponseArrayList = new ArrayList<>();
+    ArrayList<SongsItem> singleSongsDataArraylist = new ArrayList<>();
 
 
     //declare the retrofit objects. All these are used with retrofit
@@ -100,6 +101,7 @@ public class SongsView extends AppCompatActivity {
 
                 footerAdapter.clear();
                 footerAdapter.add(new ProgressItem().withEnabled(false));
+                loadMoreSongs();
 
                 //ToDo add a method  to LOAD MORE items
 
@@ -115,7 +117,7 @@ public class SongsView extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
-
+                refreshSongs();
                 //ToDo add a method  to REFRESH items
 
 
@@ -150,32 +152,24 @@ public class SongsView extends AppCompatActivity {
 
         //add an onClickListener to the recycler view and its views
 
-        songsFastAdapter.withEventHook(new ClickEventHook<SongResponse>() {
 
-            @Nullable
-            @Override
-            public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
-
-                //return super.onBind(viewHolder);
+    }
 
 
-                if (viewHolder instanceof SongResponse.SongViewHolder) {
-                    return ((SongResponse.SongViewHolder) viewHolder).play_button;
-                    }
-                return null;
+    public void playTestClickEvent(View v) {
 
-
-            }
-            @Override
-            public void onClick(View v, int position, FastAdapter<SongResponse> fastAdapter, SongResponse item) {
-
-
-            }
-        });
+        Toast.makeText(SongsView.this, "Play Button Clicked", Toast.LENGTH_LONG).show();
 
 
     }
 
+
+    public void pauseTestClickEvent(View v) {
+
+        Toast.makeText(SongsView.this, "Pause Button Clicked", Toast.LENGTH_LONG).show();
+
+
+    }
 
     /*************************************************************************************************************************************************/
 
@@ -213,11 +207,12 @@ public class SongsView extends AppCompatActivity {
 
                     //perform the normal sequence of actions for a first time load
                     songResponseArrayList = response.body();
+                    singleSongsDataArraylist = response.body().get(0).getSongs();
                     songsFastAdapter.add(songResponseArrayList);
                     songsRecyclerView.setAdapter(footerAdapter.wrap(songsFastAdapter));
 
 
-                    Log.d("myLogsRequestUrl", response.raw().request().url().toString());
+                    Log.d("myLogsRequestUrl", response.raw().request().url().toString() + songResponseArrayList.size());
 
                 } else if (onRefreshing && !infiniteLoading) {
 
@@ -307,3 +302,41 @@ public class SongsView extends AppCompatActivity {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* songsFastAdapter.withEventHook(new ClickEventHook<SongResponse>() {
+
+            @Nullable
+            @Override
+            public View onBind(@NonNull RecyclerView.ViewHolder viewHolder) {
+
+                //return super.onBind(viewHolder);
+
+
+                if (viewHolder instanceof SongResponse.SongViewHolder) {
+                    return ((SongResponse.SongViewHolder) viewHolder).play_button;
+                    }
+                return null;
+
+
+            }
+            @Override
+            public void onClick(View v, int position, FastAdapter<SongResponse> fastAdapter, SongResponse item) {
+
+
+            }
+        });
+*/

@@ -37,7 +37,7 @@ public class ArtistView extends AppCompatActivity {
     Boolean onRefreshing = false, infiniteLoading = false;
     String selectedArtistName, selectedArtistNameQueryString, selectedArtistCoverImageReference, selectedArtistProfileImageReference;
     public static final String EXTRA_SELECTED_ALBUM_NAME = "com.example.muhinga.selectedAlbumName";
-    public static final String EXTRA_SELECTED_ARTIST_NAME = "com.example.muhinga.selectedAlbumName";
+   public static final String EXTRA_SELECTED_ARTIST_NAME = "com.example.muhinga.selectedArtistNameTest";
 
 
     //declare the view objects
@@ -77,7 +77,7 @@ public class ArtistView extends AppCompatActivity {
         //get the intent that started this activity
         Intent intent = getIntent();
         selectedArtistName = intent.getStringExtra(MusicHome.EXTRA_ARTIST_NAME);
-        selectedArtistNameQueryString = "name%3D%20" + "'" + selectedArtistName + "'";
+        selectedArtistNameQueryString = "name%3D%20"+"'"+selectedArtistName+"'";
         selectedArtistCoverImageReference = intent.getStringExtra(MusicHome.EXTRA_ARTIST_COVER_IMAGE_REFERENCE);
         selectedArtistProfileImageReference = intent.getStringExtra(MusicHome.EXTRA_ARTIST_PROFILE_IMAGE_REFERENCE);
         //name%3D%20'Kygo'
@@ -163,12 +163,12 @@ public class ArtistView extends AppCompatActivity {
             public boolean onClick(View v, IAdapter<ArtistViewAlbumResponse> adapter, ArtistViewAlbumResponse item, int position) {
 
                 //handle click here
-                String selectedAlbumName = item.getName();
+                String selectedAlbumName = item.getAlbum().getName();
 
-                Intent intent = new Intent(ArtistView.this, SongsView.class);
-                intent.putExtra(EXTRA_SELECTED_ALBUM_NAME,selectedAlbumName);
-                intent.putExtra(EXTRA_SELECTED_ARTIST_NAME,selectedArtistName);
-                startActivity(intent);
+                Intent mintent = new Intent(ArtistView.this, SongsView.class);
+                mintent.putExtra(EXTRA_SELECTED_ALBUM_NAME,selectedAlbumName);
+                mintent.putExtra(EXTRA_SELECTED_ARTIST_NAME,selectedArtistName);
+                startActivity(mintent);
 
 
                 return true;

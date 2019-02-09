@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
-    >
+    android:layout_margin="3dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,8 +15,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/test_default_img1"
-            />
+            android:src="@drawable/test_default_img1" />
 
 
         <TextView
@@ -38,7 +36,6 @@
 
 
         <ImageButton
-
             android:id="@+id/single_song_item_play_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -52,7 +49,6 @@
 
 
         <ImageButton
-
             android:id="@+id/single_song_item_pause_button"
             android:layout_width="20dp"
             android:layout_height="20dp"

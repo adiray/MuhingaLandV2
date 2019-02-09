@@ -6,6 +6,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.bumptech.glide.Glide;
@@ -18,7 +19,7 @@ public class SongResponse extends AbstractItem<SongResponse, SongResponse.SongVi
     private long created;
 
     @SerializedName("songs")
-    private List<SongsItem> songs;
+    private ArrayList<SongsItem> songs;
 
     @SerializedName("name")
     private String name;
@@ -46,11 +47,11 @@ public class SongResponse extends AbstractItem<SongResponse, SongResponse.SongVi
         return created;
     }
 
-    public void setSongs(List<SongsItem> songs) {
+    public void setSongs(ArrayList<SongsItem> songs) {
         this.songs = songs;
     }
 
-    public List<SongsItem> getSongs() {
+    public ArrayList<SongsItem> getSongs() {
         return songs;
     }
 
