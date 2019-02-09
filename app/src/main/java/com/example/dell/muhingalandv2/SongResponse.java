@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.annotations.SerializedName;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-public class SongResponse extends AbstractItem<SongResponse, SongResponse.SongViewHolder> {
+public class SongResponse {
 
     @SerializedName("created")
     private long created;
@@ -125,7 +125,7 @@ public class SongResponse extends AbstractItem<SongResponse, SongResponse.SongVi
      */
 
 
-    @Override
+  /*  @Override
     public SongResponse.SongViewHolder getViewHolder(View v) {
         return new SongViewHolder(v);
     }
@@ -174,5 +174,8 @@ public class SongResponse extends AbstractItem<SongResponse, SongResponse.SongVi
         }
     }
 
+    extends AbstractItem<SongResponse, SongResponse.SongViewHolder>
+
+*/
 
 }

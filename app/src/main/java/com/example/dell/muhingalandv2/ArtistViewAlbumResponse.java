@@ -9,15 +9,16 @@ import com.bumptech.glide.Glide;
 import com.google.gson.annotations.SerializedName;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistViewAlbumResponse extends AbstractItem<ArtistViewAlbumResponse, ArtistViewAlbumResponse.AlbumResponseViewHolder> {
+public class ArtistViewAlbumResponse {
 
     @SerializedName("created")
     private long created;
 
-    @SerializedName("album")
-    private Album album;
+    @SerializedName("albums")
+    private ArrayList<Album> album;
 
     @SerializedName("name")
     private String name;
@@ -48,11 +49,11 @@ public class ArtistViewAlbumResponse extends AbstractItem<ArtistViewAlbumRespons
         return created;
     }
 
-    public void setAlbum(Album album) {
+    public void setAlbum( ArrayList<Album> album) {
         this.album = album;
     }
 
-    public Album getAlbum() {
+    public  ArrayList<Album> getAlbum() {
         return album;
     }
 
@@ -135,7 +136,7 @@ public class ArtistViewAlbumResponse extends AbstractItem<ArtistViewAlbumRespons
      */
 
 
-    @Override
+  /*  @Override
     public AlbumResponseViewHolder getViewHolder(View v) {
         return new AlbumResponseViewHolder(v);
     }
@@ -174,6 +175,6 @@ public class ArtistViewAlbumResponse extends AbstractItem<ArtistViewAlbumRespons
             album_name_vh = itemView.findViewById(R.id.artist_view_album_name);
         }
     }
-
+*/
 
 }

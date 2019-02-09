@@ -47,7 +47,7 @@ public class SongsView extends AppCompatActivity {
     //Recycler View objects
     RecyclerView songsRecyclerView;
     ArrayList<SongResponse> songResponseArrayList = new ArrayList<>();
-    ArrayList<SongsItem> singleSongsDataArraylist = new ArrayList<>();
+    ArrayList<SongsItem> singleSongsDataArrayList = new ArrayList<>();
 
 
     //declare the retrofit objects. All these are used with retrofit
@@ -61,8 +61,9 @@ public class SongsView extends AppCompatActivity {
 
 
     //Fast adapter objects
-    FastItemAdapter<SongResponse> songsFastAdapter = new FastItemAdapter<>();    //create our FastAdapter which will manage everything
+    // FastItemAdapter<SongResponse> songsFastAdapter = new FastItemAdapter<>();//create our FastAdapter which will manage everything
     FooterAdapter<ProgressItem> footerAdapter = new FooterAdapter<>();
+    FastItemAdapter<SongsItem> songsItemFastItemAdapter = new FastItemAdapter<>(); //create the fast adapter that will handle the songs items
     EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
 
@@ -90,7 +91,8 @@ public class SongsView extends AppCompatActivity {
 
 
         //initialize our FastAdapter which will manage everything
-        songsFastAdapter = new FastItemAdapter<>();
+        // songsFastAdapter = new FastItemAdapter<>();
+        songsItemFastItemAdapter = new FastItemAdapter<>();
 
 
         //initialize the endless scroll listener
@@ -203,48 +205,65 @@ public class SongsView extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArrayList<SongResponse>> call, Response<ArrayList<SongResponse>> response) {
 
+
                 if (!onRefreshing && !infiniteLoading) {
 
-                    //perform the normal sequence of actions for a first time load
-                    songResponseArrayList = response.body();
-                    singleSongsDataArraylist = response.body().get(0).getSongs();
-                    songsFastAdapter.add(songResponseArrayList);
-                    songsRecyclerView.setAdapter(footerAdapter.wrap(songsFastAdapter));
+                    if (response.body() != null && response.body().size() > 0 && response.body().get(0).getSongs() != null) {
+                        //perform the normal sequence of actions for a first time load
+                        songResponseArrayList = response.body();
+                        singleSongsDataArrayList = response.body().get(0).getSongs();
+                        //songsFastAdapter.add(songResponseArrayList);
+                        songsItemFastItemAdapter.add(singleSongsDataArrayList);
+                        songsRecyclerView.setAdapter(footerAdapter.wrap(songsItemFastItemAdapter));
+                    }
 
 
                     Log.d("myLogsRequestUrl", response.raw().request().url().toString() + songResponseArrayList.size());
 
                 } else if (onRefreshing && !infiniteLoading) {
 
-                    //perform the sequence of actions for a refreshed load
-                    songResponseArrayList.clear();
-                    songResponseArrayList = response.body();
-                    songsFastAdapter.clear();
-                    songsRecyclerView.clearOnScrollListeners();
-                    songsRecyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
-                    songsFastAdapter.add(response.body());
-                    endlessRecyclerOnScrollListener.resetPageCount();
 
+                    if (response.body() != null && response.body().size() > 0 && response.body().get(0).getSongs() != null) {
+                        //perform the sequence of actions for a refreshed load
+                        // songResponseArrayList.clear();
+                        singleSongsDataArrayList.clear();
+                        singleSongsDataArrayList = response.body().get(0).getSongs();
+                        //songResponseArrayList = response.body();
+                        //songsFastAdapter.clear();
+                        songsItemFastItemAdapter.clear();
+                        songsRecyclerView.clearOnScrollListeners();
+                        songsRecyclerView.addOnScrollListener(endlessRecyclerOnScrollListener);
+                        songsItemFastItemAdapter.add(response.body().get(0).getSongs());
+                        //songsFastAdapter.add(response.body());
+                        endlessRecyclerOnScrollListener.resetPageCount();
+
+                    }
 
                     Log.d("myLogsRequestUrlOR", response.raw().request().url().toString());
 
 
                 } else if (infiniteLoading && !onRefreshing) {
 
-                    songResponseArrayList.addAll(response.body());
                     footerAdapter.clear();
-                    if (response.body().size() > 0) {
-                        songsFastAdapter.add(response.body());
-                    } else {
-                        Toast.makeText(SongsView.this, "No more items", Toast.LENGTH_LONG).show();
+
+                    if (response.body() != null && response.body().size() > 0 && response.body().get(0).getSongs() != null) {
+
+                        //songResponseArrayList.addAll(response.body());
+                        singleSongsDataArrayList.addAll(response.body().get(0).getSongs());
+
+                        if (response.body().get(0).getSongs().size() > 0) {
+                            //songsFastAdapter.add(response.body());
+                            songsItemFastItemAdapter.add(response.body().get(0).getSongs());
+                        } else {
+                            Toast.makeText(SongsView.this, "No more items", Toast.LENGTH_LONG).show();
+                        }
+
                     }
-
-
-                    Log.d("myLogsRequestUrlIL", response.raw().request().url().toString() + " table offset = " + tableOffset);
-                    infiniteLoading = false;
-
-
                 }
+
+                Log.d("myLogsRequestUrlIL", response.raw().request().url().toString() + " table offset = " + tableOffset);
+                infiniteLoading = false;
+
 
                 Log.d("myLogsOnSuccess", "onResponse: response successful");
 
@@ -291,7 +310,7 @@ public class SongsView extends AppCompatActivity {
     void loadMoreSongs() {
 
         //TODO The allHousesResponseArray exists just to give a count. Maybe the count could be more effectively stored in an integer value?
-        tableOffset = songResponseArrayList.size();
+        tableOffset = singleSongsDataArrayList.size();
         tableOffsetString = tableOffset.toString();
         songsFilterMap.put("offset", tableOffsetString);    //update the value of the offset in the request url
         Log.d("myLogs", "loadMoreSongs: " + songsFilterMap.toString());

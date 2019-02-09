@@ -1,8 +1,17 @@
 package com.example.dell.muhingalandv2;
 
-import com.google.gson.annotations.SerializedName;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-public class Album {
+import com.bumptech.glide.Glide;
+import com.google.gson.annotations.SerializedName;
+import com.mikepenz.fastadapter.items.AbstractItem;
+
+import java.util.List;
+
+public class Album extends AbstractItem<Album, Album.AlbumResponseViewHolder> {
 
     @SerializedName("created")
     private long created;
@@ -94,4 +103,55 @@ public class Album {
                         ",objectId = '" + objectId + '\'' +
                         "}";
     }
+
+
+    /*******************************************************************************************************************************************************
+     * FAST ADAPTER CODE STARTS HERE
+     *
+     */
+
+
+    @Override
+    public AlbumResponseViewHolder getViewHolder(View v) {
+        return new AlbumResponseViewHolder(v);
+    }
+
+    @Override
+    public int getType() {
+        return R.id.artist_view_album_image;
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.artist_view_single_album_view;
+    }
+
+
+    @Override
+    public void bindView(AlbumResponseViewHolder holder, List<Object> payloads) {
+        super.bindView(holder, payloads);
+
+
+        holder.album_name_vh.setText(getName());
+        Glide.with(holder.itemView).load(getCoverImage()).into(holder.album_image_vh);
+
+
+    }
+
+    protected static class AlbumResponseViewHolder extends RecyclerView.ViewHolder {
+
+        //declaring the views
+        ImageView album_image_vh;
+        TextView album_name_vh;
+
+        public AlbumResponseViewHolder(View itemView) {
+            super(itemView);
+
+            //assigning the previously declared views
+            album_image_vh = itemView.findViewById(R.id.artist_view_album_image);
+            album_name_vh = itemView.findViewById(R.id.artist_view_album_name);
+        }
+    }
+
+
 }

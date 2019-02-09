@@ -1,121 +1,188 @@
 package com.example.dell.muhingalandv2;
 
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.google.gson.annotations.SerializedName;
+import com.mikepenz.fastadapter.items.AbstractItem;
 
-public class SongsItem{
+import java.util.List;
 
-	@SerializedName("Artist")
-	private String artist;
+public class SongsItem extends AbstractItem<SongsItem, SongsItem.SongItemViewHolder> {
 
-	@SerializedName("file")
-	private String file;
+    @SerializedName("Artist")
+    private String artist;
 
-	@SerializedName("created")
-	private long created;
+    @SerializedName("file")
+    private String file;
 
-	@SerializedName("___class")
-	private String ___class;
+    @SerializedName("created")
+    private long created;
 
-	@SerializedName("cover_image")
-	private String coverImage;
+    @SerializedName("___class")
+    private String ___class;
 
-	@SerializedName("title")
-	private String title;
+    @SerializedName("cover_image")
+    private String coverImage;
 
-	@SerializedName("ownerId")
-	private String ownerId;
+    @SerializedName("title")
+    private String title;
 
-	@SerializedName("updated")
-	private long updated;
+    @SerializedName("ownerId")
+    private String ownerId;
 
-	@SerializedName("objectId")
-	private String objectId;
+    @SerializedName("updated")
+    private long updated;
 
-	public void setArtist(String artist){
-		this.artist = artist;
-	}
+    @SerializedName("objectId")
+    private String objectId;
 
-	public String getArtist(){
-		return artist;
-	}
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
 
-	public void setFile(String file){
-		this.file = file;
-	}
+    public String getArtist() {
+        return artist;
+    }
 
-	public String getFile(){
-		return file;
-	}
+    public void setFile(String file) {
+        this.file = file;
+    }
 
-	public void setCreated(long created){
-		this.created = created;
-	}
+    public String getFile() {
+        return file;
+    }
 
-	public long getCreated(){
-		return created;
-	}
+    public void setCreated(long created) {
+        this.created = created;
+    }
 
-	public void setClass(String ___class){
-		this.___class = ___class;
-	}
+    public long getCreated() {
+        return created;
+    }
 
-	public String get___class(){
-		return ___class;
-	}
+    public void setClass(String ___class) {
+        this.___class = ___class;
+    }
 
-	public void setCoverImage(String coverImage){
-		this.coverImage = coverImage;
-	}
+    public String get___class() {
+        return ___class;
+    }
 
-	public String getCoverImage(){
-		return coverImage;
-	}
+    public void setCoverImage(String coverImage) {
+        this.coverImage = coverImage;
+    }
 
-	public void setTitle(String title){
-		this.title = title;
-	}
+    public String getCoverImage() {
+        return coverImage;
+    }
 
-	public String getTitle(){
-		return title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setOwnerId(String ownerId){
-		this.ownerId = ownerId;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public Object getOwnerId(){
-		return ownerId;
-	}
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 
-	public void setUpdated(long updated){
-		this.updated = updated;
-	}
+    public Object getOwnerId() {
+        return ownerId;
+    }
 
-	public long getUpdated(){
-		return updated;
-	}
+    public void setUpdated(long updated) {
+        this.updated = updated;
+    }
 
-	public void setObjectId(String objectId){
-		this.objectId = objectId;
-	}
+    public long getUpdated() {
+        return updated;
+    }
 
-	public String getObjectId(){
-		return objectId;
-	}
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
 
-	@Override
- 	public String toString(){
-		return 
-			"SongsItem{" + 
-			"artist = '" + artist + '\'' + 
-			",file = '" + file + '\'' + 
-			",created = '" + created + '\'' + 
-			",___class = '" +___class + '\'' +
-			",cover_image = '" + coverImage + '\'' + 
-			",title = '" + title + '\'' + 
-			",ownerId = '" + ownerId + '\'' + 
-			",updated = '" + updated + '\'' + 
-			",objectId = '" + objectId + '\'' + 
-			"}";
-		}
+    public String getObjectId() {
+        return objectId;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "SongsItem{" +
+                        "artist = '" + artist + '\'' +
+                        ",file = '" + file + '\'' +
+                        ",created = '" + created + '\'' +
+                        ",___class = '" + ___class + '\'' +
+                        ",cover_image = '" + coverImage + '\'' +
+                        ",title = '" + title + '\'' +
+                        ",ownerId = '" + ownerId + '\'' +
+                        ",updated = '" + updated + '\'' +
+                        ",objectId = '" + objectId + '\'' +
+                        "}";
+    }
+
+
+    /*******************************************************************************************************************************************************
+     * FAST ADAPTER CODE STARTS HERE
+     *
+     */
+
+
+    @Override
+    public SongsItem.SongItemViewHolder getViewHolder(View v) {
+        return new SongItemViewHolder(v);
+    }
+
+    @Override
+    public int getType() {
+        return R.id.single_song_item_song_name;
+    }
+
+    @Override
+    public int getLayoutRes() {
+        return R.layout.songs_view_single_song_layout;
+    }
+
+
+    @Override
+    public void bindView(SongItemViewHolder holder, List<Object> payloads) {
+        super.bindView(holder, payloads);
+
+
+        holder.title_vh.setText(getTitle());
+        Glide.with(holder.itemView).load(getCoverImage()).into(holder.song_cover_vh);
+
+
+    }
+
+    protected static class SongItemViewHolder extends RecyclerView.ViewHolder {
+
+        //declaring the views
+        TextView title_vh;
+        ImageView song_cover_vh;
+        ImageButton play_button, pause_button, stop_button, download_button;
+
+        public SongItemViewHolder(View itemView) {
+            super(itemView);
+
+            //assigning the previously declared views
+            title_vh = itemView.findViewById(R.id.single_song_item_song_name);
+            song_cover_vh = itemView.findViewById(R.id.single_song_song_cover_image);
+            pause_button = itemView.findViewById(R.id.single_song_item_pause_button);
+            play_button = itemView.findViewById(R.id.single_song_item_play_button);
+            stop_button = itemView.findViewById(R.id.single_song_item_stop_button);
+            download_button = itemView.findViewById(R.id.single_song_item_download_button);
+
+        }
+    }
+
+
 }

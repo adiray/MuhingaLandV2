@@ -37,7 +37,7 @@ public class ArtistView extends AppCompatActivity {
     Boolean onRefreshing = false, infiniteLoading = false;
     String selectedArtistName, selectedArtistNameQueryString, selectedArtistCoverImageReference, selectedArtistProfileImageReference;
     public static final String EXTRA_SELECTED_ALBUM_NAME = "com.example.muhinga.selectedAlbumName";
-   public static final String EXTRA_SELECTED_ARTIST_NAME = "com.example.muhinga.selectedArtistNameTest";
+    public static final String EXTRA_SELECTED_ARTIST_NAME = "com.example.muhinga.selectedArtistNameTest";
 
 
     //declare the view objects
@@ -48,7 +48,8 @@ public class ArtistView extends AppCompatActivity {
 
     //declare the recycler view objects
     RecyclerView artistViewAlbumRecView;
-    ArrayList<ArtistViewAlbumResponse> allAlbumResponseArray;
+    // ArrayList<ArtistViewAlbumResponse> allAlbumResponseArray;
+    ArrayList<Album> allAlbumsResponseArray;
 
     //declare the retrofit objects. All these are used with retrofit
     Retrofit.Builder builder;
@@ -61,7 +62,8 @@ public class ArtistView extends AppCompatActivity {
 
 
     //Fast adapter objects
-    FastItemAdapter<ArtistViewAlbumResponse> artistViewAlbumFastAdapter = new FastItemAdapter<>();    //create our FastAdapter which will manage everything
+    //FastItemAdapter<ArtistViewAlbumResponse> artistViewAlbumFastAdapter = new FastItemAdapter<>(); //create our FastAdapter which will manage everything
+    FastItemAdapter<Album> albumFastItemAdapter = new FastItemAdapter<>();
     FooterAdapter<ProgressItem> footerAdapter = new FooterAdapter<>();
     EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
 
@@ -77,7 +79,7 @@ public class ArtistView extends AppCompatActivity {
         //get the intent that started this activity
         Intent intent = getIntent();
         selectedArtistName = intent.getStringExtra(MusicHome.EXTRA_ARTIST_NAME);
-        selectedArtistNameQueryString = "name%3D%20"+"'"+selectedArtistName+"'";
+        selectedArtistNameQueryString = "name%3D%20" + "'" + selectedArtistName + "'";
         selectedArtistCoverImageReference = intent.getStringExtra(MusicHome.EXTRA_ARTIST_COVER_IMAGE_REFERENCE);
         selectedArtistProfileImageReference = intent.getStringExtra(MusicHome.EXTRA_ARTIST_PROFILE_IMAGE_REFERENCE);
         //name%3D%20'Kygo'
@@ -103,7 +105,8 @@ public class ArtistView extends AppCompatActivity {
 
 
         //initialize our FastAdapter which will manage everything
-        artistViewAlbumFastAdapter = new FastItemAdapter<>();
+        // artistViewAlbumFastAdapter = new FastItemAdapter<>();
+        albumFastItemAdapter = new FastItemAdapter<>();
 
 
         //initialize the endless scroll listener
@@ -148,7 +151,7 @@ public class ArtistView extends AppCompatActivity {
         albumsFilterMap.put("pageSize", "4");
         albumsFilterMap.put("offset", tableOffsetString);
         albumsFilterMap.put("sortBy", "created%20desc");
-        albumsFilterMap.put("loadRelations", "album");
+        albumsFilterMap.put("loadRelations", "albums");
 
 
         buildRetrofitClient();  //build the retrofit client
@@ -157,17 +160,17 @@ public class ArtistView extends AppCompatActivity {
 
 
         //add an on click to the fast adapter
-        artistViewAlbumFastAdapter.withSelectable(true);
-        artistViewAlbumFastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ArtistViewAlbumResponse>() {
+        albumFastItemAdapter.withSelectable(true);
+        albumFastItemAdapter.withOnClickListener(new FastAdapter.OnClickListener<Album>() {
             @Override
-            public boolean onClick(View v, IAdapter<ArtistViewAlbumResponse> adapter, ArtistViewAlbumResponse item, int position) {
+            public boolean onClick(View v, IAdapter<Album> adapter, Album item, int position) {
 
                 //handle click here
-                String selectedAlbumName = item.getAlbum().getName();
+                String selectedAlbumName = item.getName();
 
                 Intent mintent = new Intent(ArtistView.this, SongsView.class);
-                mintent.putExtra(EXTRA_SELECTED_ALBUM_NAME,selectedAlbumName);
-                mintent.putExtra(EXTRA_SELECTED_ARTIST_NAME,selectedArtistName);
+                mintent.putExtra(EXTRA_SELECTED_ALBUM_NAME, selectedAlbumName);
+                mintent.putExtra(EXTRA_SELECTED_ARTIST_NAME, selectedArtistName);
                 startActivity(mintent);
 
 
@@ -212,39 +215,49 @@ public class ArtistView extends AppCompatActivity {
 
                 if (!onRefreshing && !infiniteLoading) {
 
-                    //perform the normal sequence of actions for a first time load
-                    allAlbumResponseArray = response.body();
-                    artistViewAlbumFastAdapter.add(allAlbumResponseArray);
-                    artistViewAlbumRecView.setAdapter(footerAdapter.wrap(artistViewAlbumFastAdapter));
+                    if (response.body()!= null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
 
+                        //perform the normal sequence of actions for a first time load
+                        allAlbumsResponseArray = response.body().get(0).getAlbum();
+                        //   artistViewAlbumFastAdapter.add(allAlbumResponseArray);
+                        albumFastItemAdapter.add(allAlbumsResponseArray);
+                        artistViewAlbumRecView.setAdapter(footerAdapter.wrap(albumFastItemAdapter));
 
+                    }
                     Log.d("myLogsRequestUrl", response.raw().request().url().toString());
 
                 } else if (onRefreshing && !infiniteLoading) {
 
-                    //perform the sequence of actions for a refreshed load
-                    allAlbumResponseArray.clear();
-                    allAlbumResponseArray = response.body();
-                    artistViewAlbumFastAdapter.clear();
-                    artistViewAlbumRecView.clearOnScrollListeners();
-                    artistViewAlbumRecView.addOnScrollListener(endlessRecyclerOnScrollListener);
-                    artistViewAlbumFastAdapter.add(response.body());
-                    endlessRecyclerOnScrollListener.resetPageCount();
+                    if (response.body()!= null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
 
+                        //perform the sequence of actions for a refreshed load
+                        allAlbumsResponseArray.clear();
+                        allAlbumsResponseArray = response.body().get(0).getAlbum();
+                        albumFastItemAdapter.clear();
+                        artistViewAlbumRecView.clearOnScrollListeners();
+                        artistViewAlbumRecView.addOnScrollListener(endlessRecyclerOnScrollListener);
+                        albumFastItemAdapter.add(response.body().get(0).getAlbum());
+                        endlessRecyclerOnScrollListener.resetPageCount();
 
+                    }
                     Log.d("myLogsRequestUrlOR", response.raw().request().url().toString());
 
 
                 } else if (infiniteLoading && !onRefreshing) {
 
-                    allAlbumResponseArray.addAll(response.body());
                     footerAdapter.clear();
-                    if (response.body().size() > 0) {
-                        artistViewAlbumFastAdapter.add(response.body());
-                    } else {
-                        Toast.makeText(ArtistView.this, "No more items", Toast.LENGTH_LONG).show();
-                    }
 
+
+                    if (response.body()!= null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
+
+                        allAlbumsResponseArray.addAll(response.body().get(0).getAlbum());
+                        if (response.body().size() > 0) {
+                            albumFastItemAdapter.add(response.body().get(0).getAlbum());
+                        } else {
+                            Toast.makeText(ArtistView.this, "No more items", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
 
                     Log.d("myLogsRequestUrlIL", response.raw().request().url().toString() + " table offset = " + tableOffset);
                     infiniteLoading = false;
@@ -293,7 +306,7 @@ public class ArtistView extends AppCompatActivity {
     void loadMoreAlbums() {
 
         //TODO The allHousesResponseArray exists just to give a count. Maybe the count could be more effectively stored in an integer value?
-        tableOffset = allAlbumResponseArray.size();
+        tableOffset = allAlbumsResponseArray.size();
         tableOffsetString = tableOffset.toString();
         albumsFilterMap.put("offset", tableOffsetString);    //update the value of the offset in the request url
         Log.d("myLogs", "loadMoreAlbums: " + albumsFilterMap.toString());
