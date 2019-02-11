@@ -25,7 +25,8 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".MusicHome" />
         <activity android:name=".ArtistView" />
-        <activity android:name=".SongsView"></activity>
+        <activity android:name=".SongsView" />
+        <activity android:name=".PlayMusic"></activity>
     </application>
 
 </manifest>

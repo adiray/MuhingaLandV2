@@ -215,7 +215,7 @@ public class ArtistView extends AppCompatActivity {
 
                 if (!onRefreshing && !infiniteLoading) {
 
-                    if (response.body()!= null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
+                    if (response.body() != null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
 
                         //perform the normal sequence of actions for a first time load
                         allAlbumsResponseArray = response.body().get(0).getAlbum();
@@ -228,7 +228,7 @@ public class ArtistView extends AppCompatActivity {
 
                 } else if (onRefreshing && !infiniteLoading) {
 
-                    if (response.body()!= null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
+                    if (response.body() != null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
 
                         //perform the sequence of actions for a refreshed load
                         allAlbumsResponseArray.clear();
@@ -248,7 +248,7 @@ public class ArtistView extends AppCompatActivity {
                     footerAdapter.clear();
 
 
-                    if (response.body()!= null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
+                    if (response.body() != null && response.body().size() > 0 && response.body().get(0).getAlbum() != null) {
 
                         allAlbumsResponseArray.addAll(response.body().get(0).getAlbum());
                         if (response.body().size() > 0) {
@@ -314,9 +314,6 @@ public class ArtistView extends AppCompatActivity {
         onRefreshing = false;
         requestAlbums();
     }
-
-
-    /*************************************************************************************************************************************************/
 
 
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.adapters.FooterAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.listeners.ClickEventHook;
@@ -36,7 +37,7 @@ public class SongsView extends AppCompatActivity {
 
     //miscellaneous objects
     Boolean onRefreshing = false, infiniteLoading = false; //shows weather the user is refreshing or loading more items respectively
-    String selectedAlbumName, selectedArtistName, selectedAlbumNameQueryString;
+    String selectedAlbumName, selectedArtistName, selectedAlbumNameQueryString, selectedSongUrl , selectedSongTitle, selectedSongCoverImage;
 
 
     //declare the view objects
@@ -65,6 +66,13 @@ public class SongsView extends AppCompatActivity {
     FooterAdapter<ProgressItem> footerAdapter = new FooterAdapter<>();
     FastItemAdapter<SongsItem> songsItemFastItemAdapter = new FastItemAdapter<>(); //create the fast adapter that will handle the songs items
     EndlessRecyclerOnScrollListener endlessRecyclerOnScrollListener;
+
+    //Intent objects
+    public static final String EXTRA_PLAY_SONG_ARTIST_NAME = "com.example.muhinga.PlaySongsArtistName";
+    public static final String EXTRA_PLAY_SONG_ALBUM_NAME = "com.example.muhinga.PlaySongsAlbumName";
+    public static final String EXTRA_PLAY_SONG_FILE_REFERENCE = "com.example.muhinga.PlaySongsFileReference";
+    public static final String EXTRA_PLAY_SONG_TITLE = "com.example.muhinga.PlaySongsTitle";
+    public static final String EXTRA_PLAY_SONG_COVER_IMAGE = "com.example.muhinga.PlaySongsCoverImage";
 
 
     @Override
@@ -153,6 +161,35 @@ public class SongsView extends AppCompatActivity {
 
 
         //add an onClickListener to the recycler view and its views
+        songsItemFastItemAdapter.withSelectable(true);
+        songsItemFastItemAdapter.withOnClickListener(new FastAdapter.OnClickListener<SongsItem>() {
+            @Override
+            public boolean onClick(View v, IAdapter<SongsItem> adapter, SongsItem item, int position) {
+
+                selectedSongUrl = item.getFile();
+                selectedSongTitle = item.getTitle();
+                selectedSongCoverImage = item.getCoverImage();
+
+                Intent intent = new Intent(SongsView.this, PlayMusic.class);
+                intent.putExtra(EXTRA_PLAY_SONG_ALBUM_NAME,selectedAlbumName);
+                intent.putExtra(EXTRA_PLAY_SONG_ARTIST_NAME,selectedArtistName);
+                intent.putExtra(EXTRA_PLAY_SONG_FILE_REFERENCE,selectedSongUrl);
+                intent.putExtra(EXTRA_PLAY_SONG_TITLE,selectedSongTitle);
+                intent.putExtra(EXTRA_PLAY_SONG_COVER_IMAGE,selectedSongCoverImage);
+                startActivity(intent);
+
+
+
+
+
+                return true;
+            }
+        });
+
+
+
+
+
 
 
     }

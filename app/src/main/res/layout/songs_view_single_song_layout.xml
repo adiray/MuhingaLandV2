@@ -36,7 +36,6 @@
 
 
         <ImageButton
-            android:onClick="playTestClickEvent"
             android:id="@+id/single_song_item_play_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -50,7 +49,6 @@
 
 
         <ImageButton
-            android:onClick="pauseTestClickEvent"
             android:id="@+id/single_song_item_pause_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
