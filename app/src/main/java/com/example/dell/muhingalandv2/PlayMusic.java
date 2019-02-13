@@ -22,7 +22,9 @@ public class PlayMusic extends AppCompatActivity {
     ImageView coverImageImgView;
 
     //Media player objects
-    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer = null;
+    Integer songPosition;
+    Boolean isPaused = false;
 
 
     @Override
@@ -86,33 +88,45 @@ public class PlayMusic extends AppCompatActivity {
 
 
         playButton.setBackgroundColor(getResources().getColor(R.color.my_color_alternative_shade));
+        pauseButton.setBackgroundColor(getResources().getColor(R.color.my_color_bg));
+        stopButton.setBackgroundColor(getResources().getColor(R.color.my_color_bg));
 
-        mediaPlayer = new android.media.MediaPlayer();
-        mediaPlayer.setAudioStreamType(android.media.AudioManager.STREAM_MUSIC);
-        try {
 
-            mediaPlayer.setDataSource(songFileReference);
+        if (!isPaused) {
+            mediaPlayer = new android.media.MediaPlayer();
+            mediaPlayer.setAudioStreamType(android.media.AudioManager.STREAM_MUSIC);
+            try {
 
-        } catch (IllegalArgumentException | SecurityException | IllegalStateException e) {
+                mediaPlayer.setDataSource(songFileReference);
 
-            android.widget.Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", android.widget.Toast.LENGTH_LONG).show();
+            } catch (IllegalArgumentException | SecurityException | IllegalStateException e) {
 
-        } catch (java.io.IOException e) {
+                android.widget.Toast.makeText(getApplicationContext(), "You might not set the URI correctly!", android.widget.Toast.LENGTH_LONG).show();
 
-            e.printStackTrace();
+            } catch (java.io.IOException e) {
 
-        }
-
-        mediaPlayer.prepareAsync();
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-
-                mediaPlayer.start();
-
+                e.printStackTrace();
 
             }
-        });
+
+            mediaPlayer.prepareAsync();
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+
+                    mediaPlayer.start();
+
+
+                }
+            });
+        } else {
+
+            mediaPlayer.seekTo(songPosition);
+            mediaPlayer.start();
+            isPaused = false;
+
+
+        }
 
 
     }
@@ -120,21 +134,39 @@ public class PlayMusic extends AppCompatActivity {
 
     public void pauseSong() {
 
+        if (mediaPlayer != null) {
+            songPosition = mediaPlayer.getCurrentPosition();
+            mediaPlayer.pause();
+            isPaused = true;
+            playButton.setBackgroundColor(getResources().getColor(R.color.my_color_bg));
+            stopButton.setBackgroundColor(getResources().getColor(R.color.my_color_bg));
+            pauseButton.setBackgroundColor(getResources().getColor(R.color.my_color_alternative_shade));
 
-        mediaPlayer.pause();
+        }
+
 
     }
 
 
     public void stopSong() {
 
+        if (mediaPlayer != null) {
 
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = null;
+            playButton.setBackgroundColor(getResources().getColor(R.color.my_color_bg));
+            pauseButton.setBackgroundColor(getResources().getColor(R.color.my_color_bg));
+            stopButton.setBackgroundColor(getResources().getColor(R.color.my_color_alternative_shade));
+
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            isPaused = false;
+
+        }
 
 
     }
+
+
 
 
 }
